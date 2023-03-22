@@ -8,7 +8,7 @@ public class WeightedGraph {
         this.nodeList = nodeList;
     }
 
-
+//Dijkstra algorithm
     public void dijkstra(WeightedNode node){
         PriorityQueue<WeightedNode> q = new PriorityQueue<>();
         node.distance = 0;
@@ -90,6 +90,45 @@ public class WeightedGraph {
         }
 
     }
+
+//    Floyd Warshall
+    public void floydWarshall(){
+        int size = nodeList.size();
+        int[][] V = new int[size][size];
+
+        // Initializing Distance table from adjacency list
+        for (int i = 0; i < size; i++) {
+            WeightedNode first = nodeList.get(i);
+            for (int j = 0; j < size; j++) {
+                WeightedNode second = nodeList.get(j);
+                //we have direct edge between i & j
+                //no direct edge between i & j, so mark it as infinity [divided by 10 to avoid arithmetic overflow]
+                if (i == j)
+                    V[i][j] = 0;
+                else V[i][j] = first.weightMap.getOrDefault(second, Integer.MAX_VALUE / 10);
+            }
+        }//end of loop
+
+        for (int k = 0; k < nodeList.size(); k++) {
+            for (int i = 0; i < nodeList.size(); i++) {
+                for (int j = 0; j < nodeList.size(); j++) {
+                    if (V[i][j] > V[i][k] + V[k][j]) {  // if update possible, then update path
+                        V[i][j] = V[i][k] + V[k][j];    // this will keep a track on path
+                    }
+                }
+            }
+        }//end of loop
+
+        for(int i = 0;i < size;i++){
+            System.out.print("List for row "+nodeList.get(i)+" ");
+            for(int j = 0;j < size;j++){
+                int num = V[i][j];
+                System.out.print( num+" ");
+            }
+            System.out.println();
+        }
+    }
+    
 
 
 
